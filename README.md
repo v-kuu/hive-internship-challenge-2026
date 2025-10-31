@@ -15,7 +15,7 @@ We strongly recommend that you:
     - Example usage: `ResourceManager::getOrLoadFont("Lavigne.ttf")`
     - Look in `/src/gamestates/StateMenu.cpp` for examples of loading fonts and textures.
 - DO NOT MODIFY the ResourceManager. We might run your game on a different platform than what you developed on.
-- DO NOT MODIFY the CMakeLists.txt file. We will use Cmake to build your project.
+- Avoid modifying the CMakeLists.txt file. We will use Cmake to build your project.
 - (optional) Test on different platforms if you can, to assure your submission builds and functions the same.
 
 We will build your project with the build steps outlined below. If your submission produces any build errors we will most likely end the evaluation there.
@@ -60,9 +60,12 @@ Upload your work to Google Drive, Dropbox (or some other service), and complete 
 - A link to your submission (remember to check permissions)
 - Your full name
 - Your email address
-- Any instructions for your game.
 
 [**SUBMIT**](https://supr.cl/hive2026submit)
+
+## Your Game's Instructions
+
+Please include any instructions to your game here.
 
 ## Troubleshooting
 
