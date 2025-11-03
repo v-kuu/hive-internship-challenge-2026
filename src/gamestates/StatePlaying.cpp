@@ -38,13 +38,15 @@ void StatePlaying::update(float dt)
 {
     m_timeUntilEnemySpawn -= dt;
 	m_timeUntilRangedSpawn -= dt;
+	m_timeElapsed += dt;
+	ShaderBank::shaders["Lines"].setUniform("time", m_timeElapsed);
 
     if (m_timeUntilEnemySpawn < 0.0f)
     {
-		if (nextEnemy == m_enemies.size())
-			nextEnemy = 0;
-		m_enemies[nextEnemy]->spawn();
-		nextEnemy++;
+		if (m_nextEnemy == m_enemies.size())
+			m_nextEnemy = 0;
+		m_enemies[m_nextEnemy]->spawn();
+		m_nextEnemy++;
         m_timeUntilEnemySpawn = enemySpawnInterval;
     }
 
@@ -78,9 +80,9 @@ void StatePlaying::update(float dt)
     bool playerDied = false;
     for (const std::unique_ptr<Enemy>& pEnemy : m_enemies)
     {
-        float distance = (m_pPlayer->getPosition() - pEnemy->getPosition()).lengthSquared();
-        float minDistance = std::pow(Player::collisionRadius + pEnemy->getCollisionRadius(), 2.0f);
         const sf::Vector2f playerPosition = m_pPlayer->getPosition();
+        float distance = (playerPosition - pEnemy->getPosition()).lengthSquared();
+        float minDistance = std::pow(Player::collisionRadius + pEnemy->getCollisionRadius(), 2.0f);
 
         if (distance <= minDistance)
         {
@@ -130,7 +132,7 @@ void StatePlaying::update(float dt)
 
 void StatePlaying::render(sf::RenderTarget& target) const
 {
-    target.draw(m_ground);
+    target.draw(m_ground, &ShaderBank::shaders["Lines"]);
     for (const std::unique_ptr<Enemy>& pEnemy : m_enemies)
         pEnemy->render(target);
     m_pPlayer->render(target);

@@ -38,6 +38,10 @@ void Projectile::render(sf::RenderTarget& target) const
 
 void Projectile::spawn(sf::Vector2f source, sf::Vector2f target)
 {
+	std::random_device rd;
+	std::mt19937 rand(rd());
+	std::uniform_int_distribution<> offset(-100, 300);
+	target.x += offset(rand);
 	velocity = (target - source).normalized() * 300.f;
 	setPosition(source);
 	isSpawned = true;

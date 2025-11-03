@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.h"
+#include <random>
 #include "ResourceManager.h"
 #include <SFML/Graphics.hpp>
 

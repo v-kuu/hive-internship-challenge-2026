@@ -53,6 +53,35 @@ void main()
 }
 )";
 
+constexpr std::string_view fragPerspectiveLines = R"(
+uniform float time;
+uniform vec2 resolution;
+
+void main()
+{
+	vec2 uv = gl_FragCoord.xy / resolution.xy;
+	vec3 background = vec3(0.0, 0.8, 0.0);
+	uv.x = (uv.x - 0.5) * 2.0;
+
+	float perspective = 1.5;
+	float depth = 1.0 / (1.0 + perspective * (1.0 - uv.y));
+	float perspX = uv.x * depth;
+
+	float lineFreq = 10.0;
+	float speed = 0.5;
+	float offset = time * speed;
+	float pattern = fract(perspX * lineFreq + offset);
+
+	float halfWidth = 0.02;
+	float line = 1.0 - smoothstep(0.5 - halfWidth, 0.5 + halfWidth, pattern);
+
+	vec3 lineColor = vec3(0.0, 0.2, 0.0);
+	float fade = smoothstep(0.2, 1.0, uv.y);
+	vec3 color = mix(background, lineColor, line * fade);
+	gl_FragColor = vec4(color, 1);
+}
+)";
+
 std::map<std::string, sf::Shader> ShaderBank::shaders = {};
 
 void ShaderBank::init(sf::RenderWindow &window)
@@ -68,4 +97,9 @@ void ShaderBank::init(sf::RenderWindow &window)
 	shader.setUniform("texture", sf::Shader::CurrentTexture);
 	shader.setUniform("resolution", sf::Vector2f(window.getSize()));
 	shaders["CRT"] = std::move(shader);
+
+	if (!shader.loadFromMemory(fragPerspectiveLines, sf::Shader::Type::Fragment))
+		std::cerr << "Failed to load shader from memory" << std::endl;
+	shader.setUniform("resolution", sf::Vector2f(window.getSize()));
+	shaders["Lines"] = std::move(shader);
 }

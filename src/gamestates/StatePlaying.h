@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IState.h"
+#include "ShaderBank.h"
 #include "entities/Player.h"
 #include "entities/Enemy.h"
 #include "entities/RangedEnemy.h"
@@ -33,7 +34,8 @@ private:
     std::vector<std::unique_ptr<Enemy>> m_enemies;
     sf::RectangleShape m_ground;
     bool m_hasPauseKeyBeenReleased = true;
-	int nextEnemy = 0;
+	int m_nextEnemy = 0;
+	float m_timeElapsed = 0;
 
     void updateCollisions();
 };
