@@ -1,4 +1,5 @@
 #include "StatePlaying.h"
+#include <cmath>
 #include "StatePaused.h"
 #include "StateStack.h"
 #include "ResourceManager.h"

@@ -1,0 +1,10 @@
+CompileFlags:
+  Add: [
+    "-std=c++17"
+  ]
+Diagnostics:
+  ClangTidy:
+    Add: [
+      "bugprone-*",
+      "readability-function-*"
+    ]
