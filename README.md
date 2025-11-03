@@ -65,7 +65,16 @@ Upload your work to Google Drive, Dropbox (or some other service), and complete 
 
 ## Your Game's Instructions
 
-Please include any instructions to your game here.
+You have 3 lives max. Dodge the enemies on the ground and projectiles from flying enemies. You can also try to deflect the projectiles to gain some HP back, but if you mistime it, your deflect goes on a longer cooldown. (0 cooldown if you hit).
+
+Keys:
+Space = jump
+Enter/Return = deflect
+
+Additional textures by Anton Revin, (CC0) Public Domain
+https://opengameart.org/content/retropixel-icons-v1-9x9
+
+P.S Couldn't get my last shader working for drawing lines on the ground. It isn't expected work. I took the CRT shader from one of my previous projects.
 
 ## Troubleshooting
 
