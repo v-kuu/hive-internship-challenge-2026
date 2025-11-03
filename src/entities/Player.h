@@ -21,4 +21,5 @@ public:
     void render(sf::RenderTarget& target) const override;
 
     bool m_isJumping = false;
+	bool m_jumpAvailable = true;
 };
