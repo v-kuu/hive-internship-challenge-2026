@@ -4,6 +4,8 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <cmath>
 
+bool Player::jumpInput = false;
+
 Player::Player()
 {
 }
@@ -30,13 +32,13 @@ bool Player::init()
 
 void Player::update(float dt)
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && m_jumpAvailable)
+    if (jumpInput && m_jumpAvailable)
     {
         m_isJumping = true;
 		m_jumpAvailable = false;
     }
 
-    if (m_position.y < 600)
+    if (!jumpInput || m_position.y < 600)
         m_isJumping = false;
 
     if (m_isJumping)

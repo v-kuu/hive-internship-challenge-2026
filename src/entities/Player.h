@@ -12,6 +12,7 @@ class Player final : public Entity
 {
 public:
     static constexpr float collisionRadius = 42.0f;
+	static bool jumpInput;
 
     Player();
     virtual ~Player() = default;
@@ -22,4 +23,6 @@ public:
 
     bool m_isJumping = false;
 	bool m_jumpAvailable = true;
+	const float maxAirTime = 1.f;
+	float airTime = maxAirTime;
 };

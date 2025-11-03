@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
+#include "entities/Player.h"
 
 int main(int argc, char* argv[])
 {
@@ -17,7 +18,7 @@ int main(int argc, char* argv[])
     ResourceManager::init(argv[0]);
 
     sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Runner");
-    window.setKeyRepeatEnabled(false);
+    window.setKeyRepeatEnabled(true);
 
     StateStack gamestates;
     if (!gamestates.push<StateMenu>())
@@ -37,6 +38,16 @@ int main(int argc, char* argv[])
             {
                 return 0;
             }
+			if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+			{
+				if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
+					Player::jumpInput = true;
+			}
+			if (const auto* keyPressed = event->getIf<sf::Event::KeyReleased>())
+			{
+				if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
+					Player::jumpInput = false;
+			}
         }
 
         pState->update(elapsedTime.asSeconds());
