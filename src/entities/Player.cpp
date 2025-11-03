@@ -52,7 +52,7 @@ void Player::update(float dt)
 		m_jumpAvailable = true;
 		m_velocity_Y = 0.f;
 	}
-	if (m_deflectCooldown <= 0 && deflectInput)
+	if (m_deflectCooldown <= 0 && deflectInput && m_deflectInputGrace <= 0)
 	{
 		m_isDeflecting = true;
 		m_deflectCooldown = 2.f;
@@ -75,9 +75,12 @@ void Player::render(sf::RenderTarget& target) const
 		target.draw(*m_pSprite);
 }
 
-void Player::heal(void)
+void Player::deflect(void)
 {
 	int newHp = getHealth() + 1;
 	if (newHp <= m_maxHp)
 		setHealth(newHp);
+	m_deflectCooldown = 0;
+	m_deflectInputGrace = 0.2f;
+	m_isDeflecting = false;
 }

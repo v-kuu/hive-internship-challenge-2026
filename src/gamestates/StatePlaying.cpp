@@ -106,7 +106,7 @@ void StatePlaying::update(float dt)
 
 		if (m_pPlayer->m_isDeflecting && distance <= minDeflectDistance)
 		{
-			m_pPlayer->heal();
+			m_pPlayer->deflect();
 			pr->despawn();
 			continue;
 		}

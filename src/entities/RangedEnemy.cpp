@@ -50,7 +50,7 @@ void RangedEnemy::spawn(void)
 {
 	setPosition({1100, 100});
 	isSpawned = true;
-	fireCooldown = 1.0f;
+	fireCooldown = 0;
 }
 
 void RangedEnemy::despawn(void)
@@ -65,8 +65,8 @@ void RangedEnemy::fire(sf::Vector2f target)
 	{
 		if (nextProjectile == projectiles.size())
 			nextProjectile = 0;
-		projectiles[0]->spawn(m_position, target);
+		projectiles[nextProjectile]->spawn(m_position, target);
 		nextProjectile++;
-		fireCooldown = 3.f;
+		fireCooldown = 1.5f;
 	}
 }
