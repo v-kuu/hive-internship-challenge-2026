@@ -19,9 +19,15 @@ bool StatePlaying::init()
     m_ground.setFillColor(sf::Color::Green);
 
     m_pPlayer = std::make_unique<Player>();
-    if (!m_pPlayer || !m_pPlayer->init())
+	m_UI = std::make_unique<UserInterface>(*m_pPlayer);
+    if (!m_pPlayer || !m_pPlayer->init() || !m_UI->init())
         return false;
-
+	for (int i = 0; i < 32; ++i)
+	{
+		std::unique_ptr<Enemy> pEnemy = std::make_unique<Enemy>();
+		if (pEnemy->init())
+			m_enemies.push_back(std::move(pEnemy));
+	}
     m_pPlayer->setPosition(sf::Vector2f(200, 800));
 
     return true;
@@ -33,11 +39,11 @@ void StatePlaying::update(float dt)
 
     if (m_timeUntilEnemySpawn < 0.0f)
     {
+		if (nextEnemy == m_enemies.size())
+			nextEnemy = 0;
+		m_enemies[nextEnemy]->spawn();
+		nextEnemy++;
         m_timeUntilEnemySpawn = enemySpawnInterval;
-        std::unique_ptr<Enemy> pEnemy = std::make_unique<Enemy>();
-        pEnemy->setPosition(sf::Vector2f(1000, 800));
-        if (pEnemy->init())
-            m_enemies.push_back(std::move(pEnemy));
     }
 
     bool isPauseKeyPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape);
@@ -65,11 +71,17 @@ void StatePlaying::update(float dt)
 
         if (distance <= minDistance)
         {
-            playerDied = true;
-            break;
+			int hpRemaining = m_pPlayer->getHealth() - 1;
+			if (hpRemaining <= 0)
+			{
+				playerDied = true;
+				break;
+			}
+			m_pPlayer->setHealth(hpRemaining);
+			pEnemy->despawn();
         }
     }
-
+	m_UI->update(dt);
     // End Playing State on player death
     if (playerDied)
         m_stateStack.popDeferred();
@@ -81,4 +93,5 @@ void StatePlaying::render(sf::RenderTarget& target) const
     for (const std::unique_ptr<Enemy>& pEnemy : m_enemies)
         pEnemy->render(target);
     m_pPlayer->render(target);
+	m_UI->render(target);
 }

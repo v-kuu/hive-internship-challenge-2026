@@ -25,11 +25,29 @@ bool Enemy::init()
 
 void Enemy::update(float dt)
 {
-    m_position.x -= 200 * dt;
+	if (isSpawned)
+		m_position.x -= 200 * dt;
+	if (m_position.x < -30)
+		despawn();
 }
 
 void Enemy::render(sf::RenderTarget& target) const
 {
-    m_pSprite->setPosition(m_position);
-    target.draw(*m_pSprite);
+	if (isSpawned)
+	{
+		m_pSprite->setPosition(m_position);
+		target.draw(*m_pSprite);
+	}
+}
+
+void Enemy::spawn(void)
+{
+	setPosition({1100, 800});
+	isSpawned = true;
+}
+
+void Enemy::despawn(void)
+{
+	setPosition({-1000.f, -1000.f});
+	isSpawned = false;
 }

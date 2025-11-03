@@ -26,7 +26,7 @@ bool Player::init()
     m_pSprite->setPosition(m_position);
     m_pSprite->setScale(sf::Vector2f(3.0f, 3.0f));
     m_collisionRadius = collisionRadius;
-
+	setHealth(3);
     return true;
 }
 
@@ -36,12 +36,12 @@ void Player::update(float dt)
 
     if (jumpInput && m_jumpAvailable)
     {
-		m_velocity_Y = startVelocity;
+		m_velocity_Y = m_startVelocity;
 		m_jumpAvailable = false;
     }
 
     if (!jumpInput && m_velocity_Y >= 0)
-		m_velocity_Y *= 0.5f * dt;
+		m_velocity_Y *= 0.9f * dt;
 
 	m_velocity_Y -= gravity * dt;
 	m_position.y -= m_velocity_Y * dt;

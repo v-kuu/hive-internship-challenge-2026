@@ -19,4 +19,8 @@ public:
     bool init() override;
     void update(float dt) override;
     void render(sf::RenderTarget& target) const override;
+	void spawn(void);
+	void despawn(void);
+
+	bool isSpawned = false;
 };

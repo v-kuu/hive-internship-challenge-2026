@@ -2,7 +2,6 @@
 
 #include "Entity.h"
 #include <memory>
-#include <SFML/Window/Keyboard.hpp>
 #include <SFML/System/Angle.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
@@ -22,6 +21,6 @@ public:
     void render(sf::RenderTarget& target) const override;
 
 	bool m_jumpAvailable = true;
-	const float startVelocity = 600.f;
+	const float m_startVelocity = 600.f;
 	float m_velocity_Y = 0.f;
 };
