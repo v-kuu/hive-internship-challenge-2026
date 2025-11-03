@@ -3,6 +3,7 @@
 #include "IState.h"
 #include "entities/Player.h"
 #include "entities/Enemy.h"
+#include "entities/RangedEnemy.h"
 #include "entities/UserInterface.h"
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
@@ -21,10 +22,13 @@ public:
 
 private:
     static constexpr const float enemySpawnInterval = 2.0f;
+	static constexpr const float rangedSpawnInterval = 7.0f;
     float m_timeUntilEnemySpawn = enemySpawnInterval;
+	float m_timeUntilRangedSpawn = rangedSpawnInterval;
 
     StateStack& m_stateStack;
     std::unique_ptr<Player> m_pPlayer;
+	std::unique_ptr<RangedEnemy> m_rangedEnemy;
 	std::unique_ptr<UserInterface> m_UI;
     std::vector<std::unique_ptr<Enemy>> m_enemies;
     sf::RectangleShape m_ground;

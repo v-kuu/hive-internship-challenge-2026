@@ -19,8 +19,9 @@ bool StatePlaying::init()
     m_ground.setFillColor(sf::Color::Green);
 
     m_pPlayer = std::make_unique<Player>();
+	m_rangedEnemy = std::make_unique<RangedEnemy>();
 	m_UI = std::make_unique<UserInterface>(*m_pPlayer);
-    if (!m_pPlayer || !m_pPlayer->init() || !m_UI->init())
+    if (!m_pPlayer || !m_pPlayer->init() || !m_UI->init() || !m_rangedEnemy->init())
         return false;
 	for (int i = 0; i < 32; ++i)
 	{
@@ -36,6 +37,7 @@ bool StatePlaying::init()
 void StatePlaying::update(float dt)
 {
     m_timeUntilEnemySpawn -= dt;
+	m_timeUntilRangedSpawn -= dt;
 
     if (m_timeUntilEnemySpawn < 0.0f)
     {
@@ -46,6 +48,12 @@ void StatePlaying::update(float dt)
         m_timeUntilEnemySpawn = enemySpawnInterval;
     }
 
+	if (m_timeUntilRangedSpawn < 0.0f)
+	{
+		m_rangedEnemy->spawn();
+		m_timeUntilRangedSpawn = rangedSpawnInterval;
+	}
+
     bool isPauseKeyPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape);
     m_hasPauseKeyBeenReleased |= !isPauseKeyPressed;
     if (m_hasPauseKeyBeenReleased && isPauseKeyPressed)
@@ -55,11 +63,16 @@ void StatePlaying::update(float dt)
     }
 
     m_pPlayer->update(dt);
-
+	m_rangedEnemy->update(dt);
+	m_rangedEnemy->fire(m_pPlayer->getPosition());
     for (const std::unique_ptr<Enemy>& pEnemy : m_enemies)
     {
         pEnemy->update(dt);
     }
+	for (auto &pr : m_rangedEnemy->projectiles)
+	{
+		pr->update(dt);
+	}
 
     // Detect collisions
     bool playerDied = false;
@@ -81,6 +94,27 @@ void StatePlaying::update(float dt)
 			pEnemy->despawn();
         }
     }
+
+    for (const auto& pr : m_rangedEnemy->projectiles)
+    {
+		if (playerDied)
+			break ;
+        float distance = (m_pPlayer->getPosition() - pr->getPosition()).lengthSquared();
+        float minDistance = std::pow(Player::collisionRadius + pr->getCollisionRadius(), 2.0f);
+        const sf::Vector2f playerPosition = m_pPlayer->getPosition();
+
+        if (distance <= minDistance)
+        {
+			int hpRemaining = m_pPlayer->getHealth() - 1;
+			if (hpRemaining <= 0)
+			{
+				playerDied = true;
+				break;
+			}
+			m_pPlayer->setHealth(hpRemaining);
+			pr->despawn();
+        }
+    }
 	m_UI->update(dt);
     // End Playing State on player death
     if (playerDied)
@@ -93,5 +127,8 @@ void StatePlaying::render(sf::RenderTarget& target) const
     for (const std::unique_ptr<Enemy>& pEnemy : m_enemies)
         pEnemy->render(target);
     m_pPlayer->render(target);
+	m_rangedEnemy->render(target);
+	for (const auto &pr : m_rangedEnemy->projectiles)
+		pr->render(target);
 	m_UI->render(target);
 }
