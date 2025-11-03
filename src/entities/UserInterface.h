@@ -2,10 +2,12 @@
 
 #include "Entity.h"
 #include "ResourceManager.h"
-#include <vector>
 #include "Player.h"
+#include <vector>
+#include <memory>
+#include <sstream>
+#include <iomanip>
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Sprite.hpp>
 
 class UserInterface final : public Entity
 {
@@ -20,5 +22,9 @@ class UserInterface final : public Entity
 
 	private:
 		std::vector<sf::Sprite> _hpSprites;
+		std::unique_ptr<sf::Text> _timerText;
+		float _timeSurvived = 0;
 		const Player &_player;
+
+		std::string _timerString() const;
 };
