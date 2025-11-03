@@ -13,6 +13,7 @@ bool RangedEnemy::init()
     sf::FloatRect localBounds = m_pSprite->getLocalBounds();
     m_pSprite->setOrigin({localBounds.size.x / 2.0f, localBounds.size.y / 2.0f});
     m_pSprite->setPosition(m_position);
+	m_pSprite->setRotation(sf::degrees(180));
     m_pSprite->setScale(sf::Vector2f(2.5f, 2.5f));
 
 	for (int i = 0; i < 10; ++i)

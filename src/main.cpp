@@ -1,4 +1,5 @@
 #include "ResourceManager.h"
+#include "ShaderBank.h"
 #include "gamestates/StateStack.h"
 #include "gamestates/IState.h"
 #include "gamestates/StateMenu.h"
@@ -18,6 +19,7 @@ int main(int argc, char* argv[])
     ResourceManager::init(argv[0]);
 
     sf::RenderWindow window(sf::VideoMode({1024, 1024}), "Runner");
+	ShaderBank::init(window);
     window.setKeyRepeatEnabled(true);
 
     StateStack gamestates;
@@ -42,11 +44,15 @@ int main(int argc, char* argv[])
 			{
 				if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
 					Player::jumpInput = true;
+				if (keyPressed->scancode == sf::Keyboard::Scancode::Enter)
+					Player::deflectInput = true;
 			}
 			if (const auto* keyPressed = event->getIf<sf::Event::KeyReleased>())
 			{
 				if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
 					Player::jumpInput = false;
+				if (keyPressed->scancode == sf::Keyboard::Scancode::Enter)
+					Player::deflectInput = false;
 			}
         }
 

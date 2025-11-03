@@ -23,7 +23,7 @@ void Projectile::update(float dt)
 {
 	if (isSpawned)
 		m_position += velocity * dt;
-	if (m_position.x < -30 || m_position.y > 1100)
+	if (m_position.x < -30 || m_position.y > 800)
 		despawn();
 }
 

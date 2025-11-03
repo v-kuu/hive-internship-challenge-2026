@@ -98,11 +98,18 @@ void StatePlaying::update(float dt)
     for (const auto& pr : m_rangedEnemy->projectiles)
     {
 		if (playerDied)
-			break ;
-        float distance = (m_pPlayer->getPosition() - pr->getPosition()).lengthSquared();
-        float minDistance = std::pow(Player::collisionRadius + pr->getCollisionRadius(), 2.0f);
+			break;
         const sf::Vector2f playerPosition = m_pPlayer->getPosition();
+        float distance = (playerPosition - pr->getPosition()).lengthSquared();
+        float minDistance = std::pow(Player::collisionRadius + pr->getCollisionRadius(), 2.0f);
+		float minDeflectDistance = std::pow((Player::collisionRadius + 10.f) + pr->getCollisionRadius(), 2.0f);
 
+		if (m_pPlayer->m_isDeflecting && distance <= minDeflectDistance)
+		{
+			m_pPlayer->heal();
+			pr->despawn();
+			continue;
+		}
         if (distance <= minDistance)
         {
 			int hpRemaining = m_pPlayer->getHealth() - 1;

@@ -5,6 +5,7 @@
 #include <cmath>
 
 bool Player::jumpInput = false;
+bool Player::deflectInput = false;
 
 Player::Player()
 {
@@ -26,7 +27,7 @@ bool Player::init()
     m_pSprite->setPosition(m_position);
     m_pSprite->setScale(sf::Vector2f(3.0f, 3.0f));
     m_collisionRadius = collisionRadius;
-	setHealth(3);
+	setHealth(m_maxHp);
     return true;
 }
 
@@ -51,11 +52,32 @@ void Player::update(float dt)
 		m_jumpAvailable = true;
 		m_velocity_Y = 0.f;
 	}
+	if (m_deflectCooldown <= 0 && deflectInput)
+	{
+		m_isDeflecting = true;
+		m_deflectCooldown = 2.f;
+	}
+	if (m_deflectCooldown > 0)
+	{
+		if (m_deflectCooldown < 1.8f)
+			m_isDeflecting = false;
+		m_deflectCooldown -= dt;
+	}
 }
 
 void Player::render(sf::RenderTarget& target) const
 {
     m_pSprite->setRotation(m_rotation);
     m_pSprite->setPosition(m_position);
-    target.draw(*m_pSprite);
+	if (m_isDeflecting)
+		target.draw(*m_pSprite, &ShaderBank::shaders["Invert"]);
+	else
+		target.draw(*m_pSprite);
+}
+
+void Player::heal(void)
+{
+	int newHp = getHealth() + 1;
+	if (newHp <= m_maxHp)
+		setHealth(newHp);
 }
