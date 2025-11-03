@@ -23,6 +23,6 @@ public:
 
     bool m_isJumping = false;
 	bool m_jumpAvailable = true;
-	const float maxAirTime = 1.f;
-	float airTime = maxAirTime;
+	const float maxJumpTime = 1.f;
+	float jumpTime = maxJumpTime;
 };

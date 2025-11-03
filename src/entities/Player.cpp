@@ -38,15 +38,21 @@ void Player::update(float dt)
 		m_jumpAvailable = false;
     }
 
-    if (!jumpInput || m_position.y < 600)
+    if (!jumpInput || jumpTime <= 0)
         m_isJumping = false;
 
     if (m_isJumping)
+	{
         m_position.y -= 200 * dt;
+		jumpTime -= dt;
+	}
     else if (!m_isJumping && m_position.y < 800)
         m_position.y += 200 * dt;
 	else
+	{
 		m_jumpAvailable = true;
+		jumpTime = maxJumpTime;
+	}
 }
 
 void Player::render(sf::RenderTarget& target) const
