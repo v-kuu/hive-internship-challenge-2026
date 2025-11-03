@@ -52,9 +52,10 @@ void Player::update(float dt)
 		m_jumpAvailable = true;
 		m_velocity_Y = 0.f;
 	}
-	if (m_deflectCooldown <= 0 && deflectInput && m_deflectInputGrace <= 0)
+	if (m_deflectCooldown <= 0 && deflectInput && !m_deflectInputGrace)
 	{
 		m_isDeflecting = true;
+		m_deflectInputGrace = true;
 		m_deflectCooldown = 2.f;
 	}
 	if (m_deflectCooldown > 0)
@@ -63,6 +64,8 @@ void Player::update(float dt)
 			m_isDeflecting = false;
 		m_deflectCooldown -= dt;
 	}
+	if (!deflectInput)
+		m_deflectInputGrace = false;
 }
 
 void Player::render(sf::RenderTarget& target) const
@@ -81,6 +84,5 @@ void Player::deflect(void)
 	if (newHp <= m_maxHp)
 		setHealth(newHp);
 	m_deflectCooldown = 0;
-	m_deflectInputGrace = 0.2f;
 	m_isDeflecting = false;
 }

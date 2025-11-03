@@ -29,5 +29,5 @@ public:
 	bool m_jumpAvailable = true;
 	const float m_startVelocity = 600.f;
 	float m_velocity_Y = 0.f;
-	float m_deflectInputGrace = 0.f;
+	bool m_deflectInputGrace = false;
 };

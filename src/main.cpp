@@ -26,6 +26,7 @@ int main(int argc, char* argv[])
     if (!gamestates.push<StateMenu>())
         return -1;
 
+	sf::RenderTexture frameBuffer(window.getSize());
     sf::Clock clock;
     while (window.isOpen())
     {
@@ -57,8 +58,11 @@ int main(int argc, char* argv[])
         }
 
         pState->update(elapsedTime.asSeconds());
-        window.clear(sf::Color::Blue);
-        pState->render(window);
+        frameBuffer.clear(sf::Color::Blue);
+        pState->render(frameBuffer);
+		sf::Sprite final(frameBuffer.getTexture());
+		window.clear();
+		window.draw(final, &ShaderBank::shaders["CRT"]);
         window.display();
 
         gamestates.performDeferredPops();
