@@ -32,26 +32,24 @@ bool Player::init()
 
 void Player::update(float dt)
 {
+	const float gravity = 800.f;
+
     if (jumpInput && m_jumpAvailable)
     {
-        m_isJumping = true;
+		m_velocity_Y = startVelocity;
 		m_jumpAvailable = false;
     }
 
-    if (!jumpInput || jumpTime <= 0)
-        m_isJumping = false;
+    if (!jumpInput && m_velocity_Y >= 0)
+		m_velocity_Y *= 0.5f * dt;
 
-    if (m_isJumping)
+	m_velocity_Y -= gravity * dt;
+	m_position.y -= m_velocity_Y * dt;
+	if (m_position.y >= 800)
 	{
-        m_position.y -= 200 * dt;
-		jumpTime -= dt;
-	}
-    else if (!m_isJumping && m_position.y < 800)
-        m_position.y += 200 * dt;
-	else
-	{
+		m_position.y = 800;
 		m_jumpAvailable = true;
-		jumpTime = maxJumpTime;
+		m_velocity_Y = 0.f;
 	}
 }
 

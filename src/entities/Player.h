@@ -21,8 +21,7 @@ public:
     void update(float dt) override;
     void render(sf::RenderTarget& target) const override;
 
-    bool m_isJumping = false;
 	bool m_jumpAvailable = true;
-	const float maxJumpTime = 1.f;
-	float jumpTime = maxJumpTime;
+	const float startVelocity = 600.f;
+	float m_velocity_Y = 0.f;
 };
